@@ -1,8 +1,7 @@
-import asyncio  
-from videosdk.agents import AgentSession, WorkerJob, RoomOptions, JobContext, Agent  
-from videosdk.plugins.google import GeminiRealtime, GeminiLiveConfig  
-from videosdk.agents import RealTimePipeline  
-  
+from videosdk.agents import AgentSession, WorkerJob, RoomOptions, JobContext, Agent, Pipeline
+from videosdk.plugins.google import GeminiRealtime, GeminiLiveConfig
+import logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", handlers=[logging.StreamHandler()])
 class VisionAgent(Agent):  
     def __init__(self):  
         super().__init__(  
@@ -20,7 +19,7 @@ class VisionAgent(Agent):
 async def start_session(context: JobContext):  
     # Initialize Gemini with vision capabilities  
     model = GeminiRealtime(  
-        model="gemini-2.0-flash-live-001",  
+        model="gemini-3.1-flash-live-preview",  
         config=GeminiLiveConfig(  
             voice="Leda",  
             response_modalities=["AUDIO"]  
@@ -28,7 +27,7 @@ async def start_session(context: JobContext):
     )  
   
     # Create real-time pipeline with vision support  
-    pipeline = RealTimePipeline(model=model)  
+    pipeline = Pipeline(llm=model)  
       
     # Create agent session  
     session = AgentSession(  
@@ -36,17 +35,11 @@ async def start_session(context: JobContext):
         pipeline=pipeline  
     )  
   
-    try:  
-        await context.connect()  
-        await session.start()  
-        await asyncio.Event().wait()  
-    finally:  
-        await session.close()  
-        await context.shutdown()  
+    await session.start(wait_for_participant=True, run_until_shutdown=True)
   
 def make_context() -> JobContext:  
     room_options = RoomOptions(  
-        room_id="YOUR-ROOM-ID",  
+        room_id="<room_id>",  
         name="Vision Test Agent",  
         playground=True,  
         vision=True,  

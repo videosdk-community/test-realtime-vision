@@ -1,6 +1,6 @@
-videosdk-agents
-videosdk-plugins-google  
+videosdk-agents>=1.0.0
+videosdk-plugins-google>=1.0.0
 av
-videosdk-plugins-turn-detector  
-videosdk-plugins-silero
+videosdk-plugins-turn-detector>=1.0.0
+videosdk-plugins-silero>=1.0.0
 python-dotenv
