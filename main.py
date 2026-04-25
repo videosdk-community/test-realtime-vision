@@ -1,4 +1,4 @@
-from videosdk.agents import AgentSession, WorkerJob, RoomOptions, JobContext, Agent, Pipeline
+from videosdk.agents import AgentSession, WorkerJob, RoomOptions, JobContext, Agent, Pipeline, ObservabilityOptions, RecordingOptions
 from videosdk.plugins.google import GeminiRealtime, GeminiLiveConfig
 import logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", handlers=[logging.StreamHandler()])
@@ -35,16 +35,20 @@ async def start_session(context: JobContext):
         pipeline=pipeline  
     )  
   
-    await session.start(wait_for_participant=True, run_until_shutdown=True)
+    await session.start(
+        wait_for_participant=True,
+        run_until_shutdown=True,
+        observability=ObservabilityOptions(recording=RecordingOptions()),
+    )
   
 def make_context() -> JobContext:  
-    room_options = RoomOptions(  
-        room_id="<room_id>",  
-        name="Vision Test Agent",  
-        playground=True,  
-        vision=True,  
-        recording=False  
-    )  
+    room_options = RoomOptions(
+        room_id="<room_id>",
+        name="Vision Test Agent",
+        playground=True,
+        vision=True,
+    )
+
       
     return JobContext(room_options=room_options)  
   

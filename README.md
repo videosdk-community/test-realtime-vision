@@ -75,28 +75,29 @@ Now, open the `.env` file and add your credentials.
 **`.env.example`**
 ```env
 # VideoSDK Configuration
-VIDEOSDK_AUTH_TOKEN=your_videosdk_auth_token_here
+VIDEOSDK_API_KEY=your_videosdk_api_key_here
+VIDEOSDK_SECRET_KEY=your_videosdk_secret_key_here
 
 # Google API Configuration (for Gemini vision support)
 GOOGLE_API_KEY=your_google_api_key_here
 ```
 
-- `VIDEOSDK_AUTH_TOKEN`: Find this in your [VideoSDK Dashboard](https://app.videosdk.live/api-keys).  
+- `VIDEOSDK_API_KEY` and `VIDEOSDK_SECRET_KEY`: Find this in your [VideoSDK Dashboard](https://app.videosdk.live/api-keys).  
 - `GOOGLE_API_KEY`: Generate this from your [Google Cloud Console](https://console.cloud.google.com/apis/credentials) or [Google AI Studio](https://aistudio.google.com/apikey).  
 
 ### 5. Generate a Room ID
 
 The agent needs a `roomId` to join a meeting. You can create a new room using the VideoSDK REST API.
 
-Use your `VIDEOSDK_AUTH_TOKEN` to create a room. Here is an example using `curl`:
+Use a VideoSDK JWT token (generated from your `VIDEOSDK_API_KEY` and `VIDEOSDK_SECRET_KEY`) to create a room. Here is an example using `curl`:
 
 ```bash
 curl -X POST https://api.videosdk.live/v2/rooms \
-  -H "Authorization: YOUR_VIDEOSDK_AUTH_TOKEN" \
+  -H "Authorization: YOUR_VIDEOSDK_TOKEN" \
   -H "Content-Type: application/json"
 ```
 
-*(Replace `YOUR_VIDEOSDK_AUTH_TOKEN` with your actual token)*
+*(Replace `YOUR_VIDEOSDK_TOKEN` with a JWT generated from your API_KEY and SECRET_KEY)*
 
 ```python
 # In main.py
